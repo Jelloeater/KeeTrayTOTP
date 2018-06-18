@@ -386,7 +386,7 @@ namespace KeeTrayTOTP
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnEntryMenuClosed(object sender, EventArgs e)
-        {            
+        {
             enMenuCopyTOTP.Enabled = true;
         }
 
@@ -486,6 +486,8 @@ namespace KeeTrayTOTP
                         niMenuList.Add(NewMenu);
                         m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
                     }
+
+                    CreateMenuItemForOtherDatabases(niMenuList);
                 }
                 else
                 {
@@ -509,6 +511,41 @@ namespace KeeTrayTOTP
             {
                 niMenuTitle.Visible = false;
                 niMenuSeperator.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Creates the necessary menu items 
+        /// </summary>
+        /// <param name="items"></param>
+        private void CreateMenuItemForOtherDatabases(IList<ToolStripMenuItem> items)
+        {
+            var tabcontrol = m_host.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
+            var nonSelectedTabs = tabcontrol.TabPages.OfType<TabPage>().Where(c => c != tabcontrol.SelectedTab).ToList();
+
+            int i = 1;
+            foreach (var tab in nonSelectedTabs)
+            {
+                var item = new ToolStripMenuItem("Switch to " + tab.Text);
+                item.Tag = tab;
+                item.Click += SwitchToOtherDatabase;
+                items.Add(item);
+                
+                m_host.MainWindow.TrayContextMenu.Items.Insert(i++, item);
+            }
+        }
+
+        private void SwitchToOtherDatabase(object sender, EventArgs e)
+        {
+            var tabControl = m_host.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
+            var s = sender as ToolStripMenuItem;
+            if (s != null)
+            {
+                var t = s.Tag as TabPage;
+                if (t != null)
+                {
+                    tabControl.SelectedTab = t;
+                }
             }
         }
 
@@ -609,7 +646,7 @@ namespace KeeTrayTOTP
                             {
                                 e.Context.Entry.Touch(false);
                                 string totp = TOTPGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
-                                e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, m_host.CustomConfig.GetString(setname_string_AutoType_FieldName,setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
+                                e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, m_host.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
                             }
                             else
                             {
@@ -650,7 +687,7 @@ namespace KeeTrayTOTP
         /// <returns>Error(s) while validating Interval or Length.</returns>
         internal bool SettingsValidate(PwEntry pe)
         {
-            bool ValidInterval; bool ValidLength ; bool ValidUrl; //Dummies
+            bool ValidInterval; bool ValidLength; bool ValidUrl; //Dummies
             return SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl);
         }
 
