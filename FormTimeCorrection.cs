@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using KeePass.Plugins;
-
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP

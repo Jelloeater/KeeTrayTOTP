@@ -5,13 +5,8 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using KeePass.App;
 using KeePass.App.Configuration;
-using KeePass.DataExchange;
-using KeePass.Forms;
-using KeePass.Ecas;
 using KeePass.Plugins;
-using KeePass.Resources;
 using KeePass.UI;
 using KeePass.Util;
 using KeePass.Util.Spr;
@@ -19,14 +14,6 @@ using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Utility;
 using KeePassLib.Security;
-using KeePassLib.Delegates;
-using KeePassLib.Resources;
-using KeePassLib.Interfaces;
-using KeePassLib.Collections;
-using KeePassLib.Serialization;
-using KeePassLib.Cryptography.Cipher;
-using KeePassLib.Cryptography.PasswordGenerator;
-
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
